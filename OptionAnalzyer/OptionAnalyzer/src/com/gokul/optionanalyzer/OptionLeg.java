@@ -1,7 +1,6 @@
 package com.gokul.optionanalyzer;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class OptionLeg {
@@ -14,7 +13,7 @@ public class OptionLeg {
 	private int nPrice;
 
 	
-	private List<Integer> list = new ArrayList<>();
+//	private List<Integer> list = new ArrayList<>();
 	
 	
 	public OptionLeg () {
@@ -27,14 +26,9 @@ public class OptionLeg {
 		this.iType = iType;
 		this.nStrike = nStrike;
 		this.nPrice = nPrice;
-		setPayOffData();
+
 	}	
-	
-//	@Override
-//	public String toString() {
-//		return "OptionLeg [iPosition=" + iPosition + ", iType=" + iType + ", nStrike=" + nStrike + ", nPrice=" + nPrice
-//				+ "]";
-//	}
+
 
 	public int getiPosition() {
 		return iPosition;
@@ -69,12 +63,7 @@ public class OptionLeg {
 	}
 	
 	public List<Integer> getPayOffData() {
-		
-		return list;
-	}
-	
-	public void setPayOffData() {
-//		System.out.print("\n");
+		List<Integer> list = new ArrayList<>();
 		for(int nUnderlying =8000; nUnderlying <= 12000; nUnderlying+=100) {
 			if(iType == 0) { // 0: Call, 1: Put
 				if (iPosition > 0) { // Long
@@ -109,23 +98,16 @@ public class OptionLeg {
 				}
 				
 			}
-		}		
-
+		}			
+		return list;
 	}
-	
+
 
 	@Override
 	public String toString() {
 		return "\n OptionLeg [iPosition=" + iPosition + ", iType=" + iType + ", nStrike=" + nStrike + ", nPrice=" + nPrice
-				+ ", list=" + list + "]";
+				+ "]";
 	}
 	
-	public void printPayOffData() {
-		System.out.print("\n");
-		for (Integer element : list) {
-			System.out.print("\n " + element.toString());
-		}
-	
-	}
-	
+
 }

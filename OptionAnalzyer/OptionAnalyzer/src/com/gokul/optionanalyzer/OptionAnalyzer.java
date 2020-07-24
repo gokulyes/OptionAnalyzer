@@ -9,17 +9,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import java.awt.GridLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 
 import org.jfree.chart.ChartFactory;
@@ -27,13 +21,20 @@ import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -59,6 +60,7 @@ public class OptionAnalyzer {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					OptionAnalyzer window = new OptionAnalyzer();
@@ -88,7 +90,7 @@ public class OptionAnalyzer {
 		frmOptionanalyzer.setBackground(SystemColor.activeCaptionBorder);
 		frmOptionanalyzer.setTitle("OptionAnalyzer");
 		frmOptionanalyzer.setBounds(0, 0, 1364, 683);
-		frmOptionanalyzer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmOptionanalyzer.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frmOptionanalyzer.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
@@ -134,6 +136,7 @@ public class OptionAnalyzer {
 		
 		cmbType = new JComboBox();
 		cmbType.setModel(new DefaultComboBoxModel(new String[] {"Call", "Put"}));
+//		cmbType.setEnabled(true);
 		cmbType.setSelectedIndex(0);
 		cmbType.setBounds(186, 104, 121, 22);
 		panel.add(cmbType);
@@ -156,6 +159,7 @@ public class OptionAnalyzer {
 		
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				addOptionLeg();
 			}
@@ -168,25 +172,23 @@ public class OptionAnalyzer {
 		pnlChart.setBorder(new LineBorder(new Color(0, 0, 0), 5, true));
 		pnlChart.setBounds(411, 11, 906, 622);
 		frmOptionanalyzer.getContentPane().add(pnlChart);
-		
-//		pnlChart.add(LineChart_AWT("Linechart"));
+
 	}
 	
 	public void addOptionLeg() {
 		OptionLeg optionLeg = new OptionLeg();
 		optionLeg.setiPosition((int)spnPosition.getValue());
 		optionLeg.setiType(cmbType.getSelectedIndex());
-		System.out.print("cmbType " + cmbType.getSelectedIndex() );
+
 		optionLeg.setnStrike(Integer.parseInt(txtStrike.getText()));
 		optionLeg.setnPrice(Integer.parseInt(txtPrice.getText()));
-		optionLeg.setPayOffData();
-		System.out.printf(optionLeg.toString());
+
 		
-//		pnlChart.removeAll();
-//		pnlChart.add(LineChart_AWT("Underlying", optionLeg.getPayOffData() ));
-		showLineChart("Title", optionLeg.getPayOffData());
-		
-//		optionLeg.printPayOffData();
+		pnlChart.removeAll();
+		pnlChart.add(getLineChart(optionLeg.getPayOffData()));
+		pnlChart.revalidate();
+		pnlChart.repaint();
+
 
 	}
 	
@@ -203,7 +205,7 @@ public class OptionAnalyzer {
 	}
 	
 	public void showLineChart(String chartTitle, List<Integer> list) {
-		JFreeChart lineChart = ChartFactory.createLineChart(
+		JFreeChart lineChart = ChartFactory.createXYLineChart(
 		         "PayOff",
 		         "Underlying","P/L",
 		         createDataset(list) ,
@@ -211,65 +213,45 @@ public class OptionAnalyzer {
 		         true,true,false);	
 		 ChartFrame cFrame = new ChartFrame("Line", lineChart	);
 		 cFrame.setVisible(true);
-		 cFrame.setSize(450,350);
+		 cFrame.setSize(906, 622);
 		
 	}
 	
-//	public ChartPanel LineChart_AWT( String chartTitle,  List<Integer> list) {
-//		System.out.print("\n Inside LineChart_AWT \n");
-//	      lineChart = ChartFactory.createLineChart(
-//	         chartTitle,
-//	         "Years","Number of Schools",
-//	         createDataset(list) ,
-//	         PlotOrientation.VERTICAL,
-//	         true,true,false);
-//	         
-//	      ChartPanel chartPanel = new ChartPanel( lineChart );
-//	      chartPanel.setPreferredSize( new java.awt.Dimension( 560 , 367 ) );
-//	      return chartPanel;
-//
-//	}
-//	
-//	public ChartPanel LineChart_AWT( String chartTitle ) {
-//	       lineChart = ChartFactory.createLineChart(
-//	         chartTitle,
-//	         "Years","Number of Schools",
-//	         createDataset(),
-//	         PlotOrientation.VERTICAL,
-//	         true,true,false);
-//	         
-//	      ChartPanel chartPanel = new ChartPanel( lineChart );
-//	      chartPanel.setPreferredSize( new java.awt.Dimension( 560 , 367 ) );
-//	      return chartPanel;
-//
-//	   }
-//
-//	   private DefaultCategoryDataset createDataset() {
-//	      dataset = new DefaultCategoryDataset( );
-//	      dataset.addValue( 15 , "schools" , "1970" );
-//	      dataset.addValue( 30 , "schools" , "1980" );
-//	      dataset.addValue( 60 , "schools" ,  "1990" );
-//	      dataset.addValue( 120 , "schools" , "2000" );
-//	      dataset.addValue( 240 , "schools" , "2010" );
-//	      dataset.addValue( 300 , "schools" , "2014" );
-//
-//	      return dataset;
-//	   }
-	   
+	public ChartPanel getLineChart(List<Integer> list) {
+		JFreeChart lineChart = ChartFactory.createXYLineChart(
+		         "PayOff",
+		         "Spot price","P/L",
+		         createDataset(list) ,
+		         PlotOrientation.VERTICAL,
+		         true,true,false);	
+		
+		ChartPanel chartPanel = new ChartPanel( lineChart );
+		chartPanel.setPreferredSize( new java.awt.Dimension( 880, 600 ) );
+		chartPanel.setVisible(true);
+		
+		return chartPanel;
+
+		
+	}
+
 	 
 	   
-	 public DefaultCategoryDataset createDataset(List<Integer> list) {
-		 
-		 DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+	 public XYDataset  createDataset(List<Integer> list) {
+
+	        var series = new XYSeries("Net");
 		 	int nUnderlyingPrice = 8000;
 		 
 			for (Integer element : list) {
-				dataset.addValue( element , "Net" , "under" );
-				System.out.print("\n " + element.toString());
-			}
+				series.add(nUnderlyingPrice, element.doubleValue());
+				nUnderlyingPrice += 100;
 
-		 return dataset;
-		 
+			}	        
+	        
+
+	        var dataset = new XYSeriesCollection();
+	        dataset.addSeries(series);
+
+	        return dataset;	 
 		 
 	 }
 }
