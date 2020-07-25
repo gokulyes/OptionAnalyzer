@@ -1,20 +1,14 @@
-package com.gokul.optionanalyzer;
+package com.gokul.optionanalyzer.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OptionLeg {
-	
-
 
 	private int iPosition;
 	private int iType;
 	private int nStrike;
 	private int nPrice;
-
-	
-//	private List<Integer> list = new ArrayList<>();
-	
 	
 	public OptionLeg () {
 		
@@ -28,7 +22,6 @@ public class OptionLeg {
 		this.nPrice = nPrice;
 
 	}	
-
 
 	public int getiPosition() {
 		return iPosition;

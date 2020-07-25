@@ -1,4 +1,5 @@
 package com.gokul.optionanalyzer;
+import com.gokul.optionanalyzer.model.OptionLeg;
 
 import java.awt.EventQueue;
 
@@ -21,14 +22,11 @@ import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -38,7 +36,10 @@ import javax.swing.WindowConstants;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+
 import com.jgoodies.forms.factories.DefaultComponentFactory;
+import javax.swing.JToolBar;
 
 public class OptionAnalyzer {
 
@@ -89,13 +90,13 @@ public class OptionAnalyzer {
 		frmOptionanalyzer = new JFrame();
 		frmOptionanalyzer.setBackground(SystemColor.activeCaptionBorder);
 		frmOptionanalyzer.setTitle("OptionAnalyzer");
-		frmOptionanalyzer.setBounds(0, 0, 1364, 683);
+		frmOptionanalyzer.setBounds(0, 0, 1416, 765);
 		frmOptionanalyzer.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frmOptionanalyzer.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0), 5));
-		panel.setBounds(10, 11, 391, 622);
+		panel.setBounds(10, 60, 391, 622);
 		frmOptionanalyzer.getContentPane().add(panel);
 		panel.setLayout(null);
 		
@@ -170,8 +171,36 @@ public class OptionAnalyzer {
 		
 		pnlChart = new JPanel();
 		pnlChart.setBorder(new LineBorder(new Color(0, 0, 0), 5, true));
-		pnlChart.setBounds(411, 11, 906, 622);
+		pnlChart.setBounds(412, 60, 906, 622);
 		frmOptionanalyzer.getContentPane().add(pnlChart);
+		
+		JToolBar toolBar = new JToolBar();
+		toolBar.setBounds(22, 11, 810, 38);
+		frmOptionanalyzer.getContentPane().add(toolBar);
+		
+		
+		ImageIcon icon = createImageIcon("/imgAddStratergy.png");
+		JButton btnAddStratergy = new JButton("Add Stratergy", icon);
+		btnAddStratergy.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				StrategyAdd strategyAdd = new StrategyAdd();
+				strategyAdd.setVisible(true);
+			}
+		});
+		toolBar.add(btnAddStratergy);
+		
+		ImageIcon iconShow = createImageIcon("/ic_add_a_photo_black_18dp.png");
+		JButton btnShowStratergy = new JButton("Show Stratergy", iconShow);
+		btnShowStratergy.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				StrategyShow strategyShow = new StrategyShow();
+				strategyShow.setVisible(true);				
+			}
+		});
+		toolBar.add(btnShowStratergy);
 
 	}
 	
@@ -200,6 +229,7 @@ public class OptionAnalyzer {
 			JOptionPane.showMessageDialog(null, "Database Connected.");
 		} catch (ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "OptionAnalyzer: Error connection database");
 			e1.printStackTrace();
 		}		
 	}
@@ -233,6 +263,18 @@ public class OptionAnalyzer {
 
 		
 	}
+	
+    /** Returns an ImageIcon, or null if the path was invalid. */
+    protected static ImageIcon createImageIcon(String path) {
+        java.net.URL imgURL = OptionAnalyzer.class.getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
+ 
 
 	 
 	   
@@ -254,4 +296,5 @@ public class OptionAnalyzer {
 	        return dataset;	 
 		 
 	 }
+	 
 }
