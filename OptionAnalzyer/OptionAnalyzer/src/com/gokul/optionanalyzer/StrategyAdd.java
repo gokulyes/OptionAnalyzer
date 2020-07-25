@@ -41,7 +41,7 @@ public class StrategyAdd extends JFrame {
 	private JComboBox cmbType;
 	
 	private JPanel pnlTable;	
-	private JTable tblStratergy;
+	private JTable tblStrategy;
 
 	/**
 	 * Launch the application.
@@ -64,7 +64,7 @@ public class StrategyAdd extends JFrame {
 	 * Create the frame.
 	 */
 	public StrategyAdd() {
-		setTitle("Stratergy Add");
+		setTitle("Strategy Add");
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(0, 0, 1416, 765);
 		getContentPane().setLayout(null);
@@ -75,7 +75,7 @@ public class StrategyAdd extends JFrame {
 		getContentPane().add(panel);
 		panel.setLayout(null);		
 		
-		JLabel lblName = new JLabel("Stratergy Name");
+		JLabel lblName = new JLabel("Strategy Name");
 		lblName.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblName.setBounds(21, 48, 104, 26);
 		panel.add(lblName);
@@ -140,7 +140,7 @@ public class StrategyAdd extends JFrame {
 		txtPrice.setBounds(186, 233, 121, 20);
 		panel.add(txtPrice);
 		
-		JLabel lblNewJgoodiesTitle = DefaultComponentFactory.getInstance().createTitle("Option Stratergy");
+		JLabel lblNewJgoodiesTitle = DefaultComponentFactory.getInstance().createTitle("Option Strategy");
 		lblNewJgoodiesTitle.setBounds(21, 11, 88, 14);
 		panel.add(lblNewJgoodiesTitle);
 		
@@ -150,9 +150,9 @@ public class StrategyAdd extends JFrame {
 		getContentPane().add(pnlTable);		
 		pnlTable.setLayout(null);
 		
-		tblStratergy = new JTable();
-		tblStratergy.setBounds(10, 11, 886, 600);
-		pnlTable.add(tblStratergy);
+		tblStrategy = new JTable();
+		tblStrategy.setBounds(10, 11, 886, 600);
+		pnlTable.add(tblStrategy);
 		
 		JButton btnAdd = new JButton("Add");
 
@@ -184,11 +184,11 @@ public class StrategyAdd extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				String insert_into_stratergy = "insert into STRATERGY (name, position, type, strike, price)values ( ?, ?, ?, ?, ?)";
+				String insert_into_strategy = "insert into STRATEGY (name, position, type, strike, price)values ( ?, ?, ?, ?, ?)";
 				
 				try {
 					
-					PreparedStatement preparedStatement = connection.prepareStatement(insert_into_stratergy);
+					PreparedStatement preparedStatement = connection.prepareStatement(insert_into_strategy);
 					preparedStatement.setString(1, txtName.getText());
 					preparedStatement.setInt( 2, cmbPosition.getSelectedIndex());
 					preparedStatement.setInt( 3, cmbType.getSelectedIndex());
@@ -198,7 +198,7 @@ public class StrategyAdd extends JFrame {
 					
 					
 					if (preparedStatement.executeUpdate() > 0) {
-						JOptionPane.showMessageDialog(null, "New Stratergy name inserted into table");
+						JOptionPane.showMessageDialog(null, "New Strategy name inserted into table");
 					}
 					
 				} catch (SQLException e1) {
@@ -218,16 +218,16 @@ public class StrategyAdd extends JFrame {
 			
 			DatabaseMetaData dmd = connection.getMetaData();
 			
-			ResultSet resultSet = dmd.getTables(null, null, "STRATERGY", null);
+			ResultSet resultSet = dmd.getTables(null, null, "STRATEGY", null);
 			
 			
 			if( resultSet.next()) { // if table exists do nothing
 			
 			} else  { 				// else create new table
-				String create_Table = "CREATE TABLE STRATERGY (id int auto_increment, name varchar2(20), position int, type int, strike int, price int)";
+				String create_Table = "CREATE TABLE STRATEGY (id int auto_increment, name varchar2(20), position int, type int, strike int, price int)";
 				PreparedStatement statement = connection.prepareStatement(create_Table);
 				statement.executeUpdate();
-				System.out.print("\nSTRATERGY Table created\n");
+				System.out.print("\nStrategy Table created\n");
 				
 				
 			}

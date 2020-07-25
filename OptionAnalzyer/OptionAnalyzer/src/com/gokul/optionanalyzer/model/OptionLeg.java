@@ -3,12 +3,16 @@ package com.gokul.optionanalyzer.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class OptionLeg {
 
 	private int iPosition;
 	private int iType;
 	private int nStrike;
 	private int nPrice;
+	
+	private List<Integer> listOLPayOff = new ArrayList<>();
 	
 	public OptionLeg () {
 		
@@ -20,6 +24,7 @@ public class OptionLeg {
 		this.iType = iType;
 		this.nStrike = nStrike;
 		this.nPrice = nPrice;
+		setPayOffData();
 
 	}	
 
@@ -55,44 +60,62 @@ public class OptionLeg {
 		this.nPrice = nPrice;
 	}
 	
-	public List<Integer> getPayOffData() {
-		List<Integer> list = new ArrayList<>();
+	public void setPayOffData() {
+		
+		listOLPayOff.clear();
+		
+		
 		for(int nUnderlying =8000; nUnderlying <= 12000; nUnderlying+=100) {
 			if(iType == 0) { // 0: Call, 1: Put
-				if (iPosition > 0) { // Long
+				if (iPosition == 0) { // Long ------ 		0: Long, 1: Short 
 					if (nUnderlying > this.nStrike) { // In the Money
-						list.add(nUnderlying - nStrike - nPrice);
+						listOLPayOff.add(nUnderlying - nStrike - nPrice);
 					} else { // Out of the Money
-						list.add(- nPrice);
+						listOLPayOff.add(- nPrice);
 					}
+
 					
-				} else if (iPosition < 0) { //Short
+				} else if (iPosition == 1) { //Short
 					if (nUnderlying > this.nStrike) { // In the Money
-						list.add(-(nUnderlying - nStrike - nPrice));
+						listOLPayOff.add(-(nUnderlying - nStrike - nPrice));
 					} else { // Out of the Money
-						list.add(nPrice);
-					}					
+						listOLPayOff.add(nPrice);
+					}
+
 				}
 
 			} else { // Put
-				if (iPosition > 0) { // Long
+				if (iPosition == 0) { // Long
 					if (nUnderlying < this.nStrike) { // In the Money
-						list.add( nStrike - nUnderlying - nPrice);
+						listOLPayOff.add( nStrike - nUnderlying - nPrice);
 					} else { // Out of the Money
-						list.add(- nPrice);
+						listOLPayOff.add(- nPrice);
 					}
+
 					
-				} else if (iPosition < 0) { //Short
+				} else if (iPosition == 1) { //Short
 					if (nUnderlying < this.nStrike) { // In the Money
-						list.add(-(nStrike - nUnderlying - nPrice));
+						listOLPayOff.add(-(nStrike - nUnderlying - nPrice));
 					} else { // Out of the Money
-						list.add(nPrice);
-					}					
+						listOLPayOff.add(nPrice);
+					}	
+
 				}
 				
 			}
-		}			
-		return list;
+		}	
+		
+	}
+	
+	public List<Integer> getPayOffData() {
+				
+		return listOLPayOff;
+	}
+	
+	public Integer getPayOffDataFromPosition(int position) {
+		
+		return listOLPayOff.get(position);
+		
 	}
 
 

@@ -190,7 +190,7 @@ public class OptionAnalyzer {
 		});
 		toolBar.add(btnAddStratergy);
 		
-		ImageIcon iconShow = createImageIcon("/ic_add_a_photo_black_18dp.png");
+		ImageIcon iconShow = createImageIcon("/imgShow.png");
 		JButton btnShowStratergy = new JButton("Show Stratergy", iconShow);
 		btnShowStratergy.addActionListener(new ActionListener() {
 			@Override
@@ -211,6 +211,7 @@ public class OptionAnalyzer {
 
 		optionLeg.setnStrike(Integer.parseInt(txtStrike.getText()));
 		optionLeg.setnPrice(Integer.parseInt(txtPrice.getText()));
+		optionLeg.setPayOffData();
 
 		
 		pnlChart.removeAll();
