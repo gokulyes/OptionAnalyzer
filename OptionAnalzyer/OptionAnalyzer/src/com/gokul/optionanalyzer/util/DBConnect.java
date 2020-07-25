@@ -1,4 +1,4 @@
-package com.gokul.optionanalyzer;
+package com.gokul.optionanalyzer.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

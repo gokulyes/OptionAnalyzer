@@ -60,8 +60,6 @@ public class OptionStrategy {
 					listOLPayOff.set(nInnerCounter,  listOLPayOff.get(nInnerCounter) + intElement);
 				}
 				nInnerCounter++;
-				System.out.print("\ngetPayOffData: " + nInnerCounter );
-				System.out.print("\ngetPayOffData: " + nInnerCounter + ":" + listOLPayOff.get(nInnerCounter-1) + "intElement: " + intElement);
 			}
 			boolFirst = false;
 			
