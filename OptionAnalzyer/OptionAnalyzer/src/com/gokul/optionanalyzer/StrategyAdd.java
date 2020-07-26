@@ -2,11 +2,13 @@ package com.gokul.optionanalyzer;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.sql.ResultSetMetaData;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -21,7 +23,10 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 
+import com.gokul.optionanalyzer.model.OptionLeg;
+import com.gokul.optionanalyzer.model.OptionStrategy;
 import com.gokul.optionanalyzer.model.StrategyTable;
 import com.gokul.optionanalyzer.util.DBConnect;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
@@ -33,6 +38,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.SystemColor;
 import javax.swing.JTable;
+
+
 
 public class StrategyAdd extends JFrame {
 	
@@ -46,6 +53,10 @@ public class StrategyAdd extends JFrame {
 	
 	private JPanel pnlTable;	
 	private JTable tblStrategy;
+	
+	private StrategyTable strategyTable;
+	private DefaultTableModel model;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -154,12 +165,23 @@ public class StrategyAdd extends JFrame {
 		getContentPane().add(pnlTable);		
 		pnlTable.setLayout(null);
 		
+		tblStrategy = new JTable();
+		tblStrategy.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+					"Name", "Position", "Type", "Strike", "Price"
+			}
+		));
+		tblStrategy.setBounds(10, 11, 886, 587);
+		model = (DefaultTableModel) tblStrategy.getModel();
+		
+		pnlTable.add(tblStrategy);
+		
 		StrategyTable strategyTable =new StrategyTable();
 		
 		
-		tblStrategy = new JTable(strategyTable);
-		tblStrategy.setBounds(10, 11, 886, 600);
-		pnlTable.add(tblStrategy);
+		
 		
 		JButton btnAdd = new JButton("Add");
 
@@ -181,17 +203,16 @@ public class StrategyAdd extends JFrame {
 		});
 		btnClose.setBounds(104, 309, 89, 23);
 		panel.add(btnClose);
-//		panel.invalidate();
-//		panel.repaint();
-		
+		panel.invalidate();
+		panel.repaint();
 
-		
-//		connectDatabase();
 		createTableNew();
 		
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				int nColumnCnt = 5; //
 				
 				String insert_into_strategy = "insert into STRATEGY (name, position, type, strike, price)values ( ?, ?, ?, ?, ?)";
 				
@@ -208,7 +229,18 @@ public class StrategyAdd extends JFrame {
 					
 					if (preparedStatement.executeUpdate() > 0) {
 						JOptionPane.showMessageDialog(null, "New Strategy name inserted into table");
+						Object rowData[] = new Object[nColumnCnt] ;
+						rowData[0] = txtName.getText();
+						rowData[1] = cmbPosition.getSelectedIndex();
+						rowData[2] = cmbType.getSelectedIndex();
+						rowData[3] = Integer.parseInt(txtStrike.getText());
+						rowData[4] =Integer.parseInt(txtPrice.getText());
+//						
+						model.addRow(rowData);
+						model.fireTableDataChanged();						
 					}
+					
+//					initTable();
 					
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -218,20 +250,51 @@ public class StrategyAdd extends JFrame {
 			}
 		});	
 		
-//		initTable();
+		initTable();
+
 	}
 	
 	public void initTable() {
-	       JTable table = new JTable(new StrategyTable());
-	       table.setPreferredScrollableViewportSize(new Dimension(500, 70));
-	       table.setFillsViewportHeight(true);
+		OptionStrategy objOptionStrategy = new OptionStrategy();
+		
+		String strSQL =  "Select * from STRATEGY";
+		
+		
+		try {
+			
+			ResultSet rs = DBConnect.getTable(strSQL);
+			
+			if(rs != null) {
+				
+				int nColumnCnt = 5; //
+				
+				Object rowData[] = new Object[nColumnCnt] ;
+				
+				while(rs.next()) {
+	//				JOptionPane.showInternalMessageDialog(null, "Result: " + rs.getString(2));
+					objOptionStrategy.setStrName(rs.getString(2));
+	//			Ref:OptionLeg(int iPosition, int iType, int nStrike, int nPrice)
+					objOptionStrategy.setOptLeg(new OptionLeg(rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6)));  
+					
+					rowData[0] = rs.getString(2);
+					rowData[1] = rs.getInt(3);
+					rowData[2] = rs.getInt(4);
+					rowData[3] = rs.getInt(5);
+					rowData[4] = rs.getInt(6);
+//					
+					model.addRow(rowData);
+					model.fireTableDataChanged();
+					
+					System.out.print( "\n" + "Name: " + rowData[0]  + " Position: "+ rowData[1]  + " Type: "+ rowData[2]  + " Strike: "+ rowData[3]   + " Price: "+rowData[4] );
 
-	       //Create the scroll pane and add the table to it.
-	       JScrollPane scrollPane = new JScrollPane(table);
+				}
 
-	       //Add the scroll pane to this panel.
-//	       add(scrollPane);
-	       pnlTable.add(scrollPane);
+			}
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	public void createTableNew() {
@@ -261,4 +324,31 @@ public class StrategyAdd extends JFrame {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	public static DefaultTableModel buildTableModel(ResultSet rs)
+	        throws SQLException {
+
+	    ResultSetMetaData metaData = rs.getMetaData();
+
+	    // names of columns
+	    Vector<String> columnNames = new Vector<String>();
+	    int columnCount = metaData.getColumnCount();
+	    for (int column = 1; column <= columnCount; column++) {
+	        columnNames.add(metaData.getColumnName(column));
+	    }
+
+	    // data of the table
+	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+	    while (rs.next()) {
+	        Vector<Object> vector = new Vector<Object>();
+	        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+	            vector.add(rs.getObject(columnIndex));
+	        }
+	        data.add(vector);
+	    }
+
+	    return new DefaultTableModel(data, columnNames);
+
+	}	
 }

@@ -1,27 +1,24 @@
 package com.gokul.optionanalyzer.model;
 
+import java.util.Vector;
+
 import javax.swing.table.AbstractTableModel;
 
 public class StrategyTable extends AbstractTableModel {
 		private boolean DEBUG = false;
-	   private String[] columnNames = {"First Name",
-               "Last Name",
-               "Sport",
-               "# of Years",
-               "Vegetarian"};
-		private Object[][] data = {
-		{"Kathy", "Smith",
-		"Snowboarding", new Integer(5), new Boolean(false)},
-		{"John", "Doe",
-		"Rowing", new Integer(3), new Boolean(true)},
-		{"Sue", "Black",
-		"Knitting", new Integer(2), new Boolean(false)},
-		{"Jane", "White",
-		"Speed reading", new Integer(20), new Boolean(true)},
-		{"Joe", "Brown",
-		"Pool", new Integer(10), new Boolean(false)}
-		};
+//	   private String[] columnNames = {"Name",
+//               "Position",
+//               "Strike",
+//               "Price",
+//               "Vegetarian"};
+//		private Object[][] data = {
+//		{"Kathy", "Smith",
+//		"Snowboarding", new Integer(5), new Boolean(false)}};
 		
+		   private String[] columnNames = {	"Name", "Position", "Type", "Strike", "Price" };
+		   private Object[][] data = {{"Name", new Integer(5), new Integer(5),  new Integer(5),  new Integer(5)}};
+	
+
 		public int getColumnCount() {
 			return columnNames.length;
 		}
@@ -105,4 +102,65 @@ public class StrategyTable extends AbstractTableModel {
 			}
 			System.out.println("--------------------------");
 		}
+		
+		public void setDataObject(OptionStrategy optionStrategy) {
+			
+//			Object[][] tempObj;
+			Object[][] tempObj = {
+					{"Kathy", "Smith",
+					"Snowboarding", new Integer(5), new Boolean(false)},
+					{"John", "Doe",
+					"Rowing", new Integer(3), new Boolean(true)},
+					{"Sue", "Black",
+					"Knitting", new Integer(2), new Boolean(false)},
+					{"Jane", "White",
+					"Speed reading", new Integer(20), new Boolean(true)},
+					{"Joe", "Brown",
+					"Pool", new Integer(10), new Boolean(false)}
+					};		
+
+//			int row =  optionStrategy.getListOptLeg().size();
+//			tempObj = new Object[row][5];
+//			
+//			int nRowCount = 0;
+//			
+//			for (OptionLeg element : optionStrategy.getListOptLeg()) {
+//				Object rowData[] = new Object[5];
+//				rowData[0]= element.getiPosition();
+//				rowData[1]= element.getiType();
+//				rowData[2]= element.getnPrice();
+//				rowData[3]= element.getnStrike();
+//				tempObj[nRowCount][0] = rowData;
+//				nRowCount++;
+//			}	
+			
+			
+		}
+
+		public void addRow(Object[] rowData) {
+			
+			Object[][] tempObj =  new Object[data.length + 1][];
+			
+			tempObj[data.length] = rowData;
+			
+			data = tempObj;
+			
+			
+			// TODO Auto-generated method stub
+//			public static double[][] insertRow(double[][] m, int r, double[] data) {
+//			    double[][] out = new double[m.length + 1][];
+//			    for (int i = 0; i < r; i++) {
+//			        out[i] = m[i];
+//			    }
+//			    out[r] = data;
+//			    for (int i = r + 1; i < out.length; i++) {
+//			        out[i] = m[i - 1];
+//			    }
+//			    return out;
+//			}
+			
+			
+			
+		}
+		
 }

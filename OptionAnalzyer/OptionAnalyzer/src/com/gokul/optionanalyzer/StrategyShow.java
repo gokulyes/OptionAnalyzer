@@ -81,7 +81,7 @@ public class StrategyShow extends JFrame {
 					
 					
 					while(rs.next()) {
-						JOptionPane.showInternalMessageDialog(null, "Result: " + rs.getString(2));
+//						JOptionPane.showInternalMessageDialog(null, "Result: " + rs.getString(2));
 						objOptionStrategy.setStrName(rs.getString(2));
 //					Ref:OptionLeg(int iPosition, int iType, int nStrike, int nPrice)
 						objOptionStrategy.setOptLeg(new OptionLeg(rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6)));  

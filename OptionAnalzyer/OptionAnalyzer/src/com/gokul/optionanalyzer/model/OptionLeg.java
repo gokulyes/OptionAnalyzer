@@ -24,7 +24,6 @@ public class OptionLeg {
 		this.nStrike = nStrike;
 		this.nPrice = nPrice;
 
-
 	}	
 
 	public int getiPosition() {

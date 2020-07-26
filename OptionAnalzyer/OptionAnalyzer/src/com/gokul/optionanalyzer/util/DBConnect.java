@@ -45,6 +45,19 @@ public class DBConnect {
 		}
 		
 	}
+	
+	public static int getRowCount(ResultSet set) throws SQLException
+	{
+	   int rowCount;
+	   int currentRow = set.getRow();            // Get current row
+	   rowCount = set.last() ? set.getRow() : 0; // Determine number of rows
+	   if (currentRow == 0)                      // If there was no current row
+	      set.beforeFirst();                     // We want next() to go to first row
+	   else                                      // If there WAS a current row
+	      set.absolute(currentRow);              // Restore it
+	   return rowCount;
+	}
+	
 	public static void checkDBConnection() { // Check if connected, if not connect to DB.
 		
 		if(connection == null) {
