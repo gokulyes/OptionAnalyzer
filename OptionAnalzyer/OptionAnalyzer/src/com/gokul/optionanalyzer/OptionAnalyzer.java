@@ -211,7 +211,6 @@ public class OptionAnalyzer {
 
 		optionLeg.setnStrike(Integer.parseInt(txtStrike.getText()));
 		optionLeg.setnPrice(Integer.parseInt(txtPrice.getText()));
-		optionLeg.setPayOffData();
 
 		
 		pnlChart.removeAll();

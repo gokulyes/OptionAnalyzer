@@ -8,7 +8,7 @@ public class OptionStrategy {
 
 	private String strName;
 	private List<OptionLeg> listOptLeg = new ArrayList<>();	
-	private List<Integer> listOLPayOff = new ArrayList<>();
+//	private List<Integer> listOLPayOff = new ArrayList<>();
 	
 	public OptionStrategy() {
 
@@ -47,6 +47,7 @@ public class OptionStrategy {
 
 		boolean boolFirst = true;
 		int nInnerCounter = 0;
+		List<Integer> listOLPayOff = new ArrayList<>();
 
 
 		for (OptionLeg outerElement : listOptLeg) {

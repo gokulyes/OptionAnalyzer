@@ -1,5 +1,6 @@
 package com.gokul.optionanalyzer;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -20,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.border.LineBorder;
 
+import com.gokul.optionanalyzer.model.StrategyTable;
 import com.gokul.optionanalyzer.util.DBConnect;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
@@ -151,7 +154,10 @@ public class StrategyAdd extends JFrame {
 		getContentPane().add(pnlTable);		
 		pnlTable.setLayout(null);
 		
-		tblStrategy = new JTable();
+		StrategyTable strategyTable =new StrategyTable();
+		
+		
+		tblStrategy = new JTable(strategyTable);
 		tblStrategy.setBounds(10, 11, 886, 600);
 		pnlTable.add(tblStrategy);
 		
@@ -175,6 +181,8 @@ public class StrategyAdd extends JFrame {
 		});
 		btnClose.setBounds(104, 309, 89, 23);
 		panel.add(btnClose);
+//		panel.invalidate();
+//		panel.repaint();
 		
 
 		
@@ -208,7 +216,22 @@ public class StrategyAdd extends JFrame {
 				}
 				
 			}
-		});		
+		});	
+		
+//		initTable();
+	}
+	
+	public void initTable() {
+	       JTable table = new JTable(new StrategyTable());
+	       table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+	       table.setFillsViewportHeight(true);
+
+	       //Create the scroll pane and add the table to it.
+	       JScrollPane scrollPane = new JScrollPane(table);
+
+	       //Add the scroll pane to this panel.
+//	       add(scrollPane);
+	       pnlTable.add(scrollPane);
 	}
 	
 	public void createTableNew() {

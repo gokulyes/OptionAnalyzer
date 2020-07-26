@@ -12,7 +12,6 @@ public class OptionLeg {
 	private int nStrike;
 	private int nPrice;
 	
-	private List<Integer> listOLPayOff = new ArrayList<>();
 	
 	public OptionLeg () {
 		
@@ -24,7 +23,7 @@ public class OptionLeg {
 		this.iType = iType;
 		this.nStrike = nStrike;
 		this.nPrice = nPrice;
-		setPayOffData();
+
 
 	}	
 
@@ -60,11 +59,9 @@ public class OptionLeg {
 		this.nPrice = nPrice;
 	}
 	
-	public void setPayOffData() {
-		
-		listOLPayOff.clear();
-		
-		
+	
+	public List<Integer> getPayOffData() {
+		List<Integer> listOLPayOff = new ArrayList<>();
 		for(int nUnderlying =8000; nUnderlying <= 12000; nUnderlying+=100) {
 			if(iType == 0) { // 0: Call, 1: Put
 				if (iPosition == 0) { // Long ------ 		0: Long, 1: Short 
@@ -103,20 +100,11 @@ public class OptionLeg {
 				}
 				
 			}
-		}	
+		}			
 		
-	}
-	
-	public List<Integer> getPayOffData() {
-				
 		return listOLPayOff;
 	}
 	
-	public Integer getPayOffDataFromPosition(int position) {
-		
-		return listOLPayOff.get(position);
-		
-	}
 
 
 	@Override
