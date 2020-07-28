@@ -23,11 +23,15 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import com.gokul.optionanalyzer.model.OptionLeg;
-import com.gokul.optionanalyzer.model.StrategyTable;
+import com.gokul.optionanalyzer.model.OptionStrategy;
+import com.gokul.optionanalyzer.model.StrategyTableModel;
 import com.gokul.optionanalyzer.util.DBConnect;
+import com.gokul.optionanalyzer.util.Util;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 import java.awt.event.ActionListener;
@@ -41,10 +45,13 @@ import com.toedter.calendar.JDateChooser;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.Color;
+import javax.swing.ListSelectionModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 
-public class StrategyAdd extends JFrame {
+public class Strategy extends JFrame {
 	
 	private Connection connection ;
 	private JTextField txtName;
@@ -55,12 +62,15 @@ public class StrategyAdd extends JFrame {
 	private JPanel pnlTable;	
 	private JTable tblStrategy;
 	
-	private StrategyTable strategyTableModel;
+	private StrategyTableModel StgTableModel;
 	private DefaultTableModel model;
 	private JTable table;
 	private JTextField txtSymbol;
 	
 	private JDateChooser dteExpiry;
+	private JTable tblAllStrategy;
+	private JTable table_1;
+	private JPanel pnlChart;
 
 	/**
 	 * Launch the application.
@@ -70,7 +80,7 @@ public class StrategyAdd extends JFrame {
 			@Override
 			public void run() {
 				try {
-					StrategyAdd frame = new StrategyAdd();
+					Strategy frame = new Strategy();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -82,7 +92,7 @@ public class StrategyAdd extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public StrategyAdd() {
+	public Strategy() {
 		setTitle("Strategy Add");
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(0, 0, 1416, 765);
@@ -90,29 +100,65 @@ public class StrategyAdd extends JFrame {
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(180, 180, 180), 1, true));
-		panel.setBounds(10, 83, 391, 622);
+		panel.setBounds(10, 93, 368, 287);
 		getContentPane().add(panel);
 		panel.setLayout(null);		
 		
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(23, 21, 321, 255);
+		panel.add(scrollPane_1);
+		
+		tblAllStrategy = new JTable();
+		scrollPane_1.setViewportView(tblAllStrategy);
+
+		tblAllStrategy.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	
+		tblAllStrategy.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Strategy"
+			}
+		));
+		
+		model = (DefaultTableModel) tblAllStrategy.getModel();
+		
+		
+		tblAllStrategy.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int iSelectedRow = tblAllStrategy.getSelectedRow();
+				showSelectedStrategyTable( model.getValueAt(iSelectedRow, 0).toString());
+				System.out.print("\nmouseClicked : " + model.getValueAt(iSelectedRow, 0));
+			}
+		});
+		
+		
 		pnlTable = new JPanel();
 		pnlTable.setBorder(new LineBorder(new Color(180, 180, 180), 1, true));
-		pnlTable.setBounds(417, 83, 906, 622);
+		pnlTable.setBounds(10, 391, 368, 321);
 		getContentPane().add(pnlTable);		
 		pnlTable.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 886, 587);
+		scrollPane.setBounds(10, 11, 344, 299);
 		pnlTable.add(scrollPane);
 		
 		
-		tblStrategy = new JTable(new StrategyTable());
+		tblStrategy = new JTable(new StrategyTableModel());
 		scrollPane.setViewportView(tblStrategy);
-		strategyTableModel = (StrategyTable) tblStrategy.getModel();
-		System.out.print(StrategyAdd.class.getResource("/imgAdd.png"));
+		StgTableModel = (StrategyTableModel) tblStrategy.getModel();
+		
+		// set the column width for each column
+		tblStrategy.getColumnModel().getColumn(0).setPreferredWidth(100);
+		tblStrategy.getColumnModel().getColumn(1).setPreferredWidth(20);
+		tblStrategy.getColumnModel().getColumn(2).setPreferredWidth(10);
+//		System.out.print(Strategy.class.getResource("/imgAdd.png"));
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(180, 180, 180), 1, true));
-		panel_1.setBounds(10, 11, 1325, 61);
+		panel_1.setBounds(10, 11, 1325, 71);
 		getContentPane().add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -217,13 +263,13 @@ public class StrategyAdd extends JFrame {
 		btnAdd.setBounds(1125, 29, 89, 23);
 		panel_1.add(btnAdd);
 		
-				btnAdd.setIcon(new ImageIcon(StrategyAdd.class.getResource("/ic_check_box.png")));
+				btnAdd.setIcon(new ImageIcon(Strategy.class.getResource("/ic_check_box.png")));
 				
 	
 				JButton btnClose = new JButton("Close");
 				btnClose.setBounds(1224, 29, 89, 23);
 				panel_1.add(btnClose);
-				btnClose.setIcon(new ImageIcon(StrategyAdd.class.getResource("/imgStop.png")));
+				btnClose.setIcon(new ImageIcon(Strategy.class.getResource("/imgStop.png")));
 				btnClose.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -234,6 +280,11 @@ public class StrategyAdd extends JFrame {
 				JLabel lblNewJgoodiesTitle = DefaultComponentFactory.getInstance().createTitle("Option Strategy");
 				lblNewJgoodiesTitle.setBounds(10, 0, 88, 14);
 				getContentPane().add(lblNewJgoodiesTitle);
+				
+				pnlChart = new JPanel();
+				pnlChart.setBounds(388, 93, 949, 622);
+				getContentPane().add(pnlChart);
+//				pnlChart.setLayout(null);
 				
 				btnAdd.addActionListener(new ActionListener() {
 					@Override
@@ -262,9 +313,10 @@ public class StrategyAdd extends JFrame {
 					
 								System.out.print(rowData.toString());
 
-//						strategyTableModel.addRow(rowData);
-								strategyTableModel.addRowData( txtName.getText(), new OptionLeg(txtSymbol.getText(), cmbPosition.getSelectedIndex(),Integer.parseInt(txtPrice.getText())));
-								strategyTableModel.fireTableDataChanged();						
+//						StgTableModel.addRow(rowData);
+//								StgTableModel.addRowData( txtName.getText(), new OptionLeg(txtSymbol.getText(), cmbPosition.getSelectedIndex(),Integer.parseInt(txtPrice.getText())));
+//								StgTableModel.fireTableDataChanged();	
+								showAllStrategyTableDataChange(rowData);
 							}
 							
 //					initTable();
@@ -281,14 +333,13 @@ public class StrategyAdd extends JFrame {
 
 		createTableNew();
 		
-		initTable();
+		showAllStrategyTable();
 
 	}
 	
-	public void initTable() {
-//		OptionStrategy objOptionStrategy = new OptionStrategy();
+	public void showAllStrategyTable() {
 		
-		String strSQL =  "Select * from STRATEGY";
+		String strSQL =  "Select distinct(name) from STRATEGY"; // Get all Distinct Strategy names from table.
 		
 		
 		try {
@@ -297,36 +348,22 @@ public class StrategyAdd extends JFrame {
 			
 			if(rs != null) {
 				
-				int nColumnCnt = 4; //
+				int nColumnCnt = 1; //
 				
 				Object rowData[] = new Object[nColumnCnt] ;
-				String strStrategyName = "";
 				
 				while(rs.next()) {
-	//				JOptionPane.showInternalMessageDialog(null, "Result: " + rs.getString(2));
-					strStrategyName = rs.getString(2);
-//					objOptionStrategy.setStrName(rs.getString(2));
-	//			Ref:OptionLeg(int iPosition, int iType, int nStrike, int nPrice)
-					OptionLeg objOptionLeg = new OptionLeg(rs.getString(3), rs.getInt(4), rs.getInt(5));
-//					objOptionStrategy.setOptLeg(objOptionLeg);  
 					
-					rowData[0] = rs.getString(2);
-					rowData[1] = rs.getString(3);
-					rowData[2] = rs.getInt(4);
-					rowData[3] = rs.getInt(5);
-			    	
-//					System.out.print( "\n ObJ: " + objOptionLeg.toString() );
-//			    	if(objOptionLeg == null)
-//			    	{
-//			    		JOptionPane.showMessageDialog(null, "addData: obj null");
-//			    	}else {
+					rowData[0] = rs.getString(1);
+					
+					showAllStrategyTableDataChange(rowData);
 //
-//			    	}
+//					model.addRow(rowData);
+//					model.fireTableDataChanged();
 					
-					strategyTableModel.addRowData(strStrategyName, objOptionLeg);
-					strategyTableModel.fireTableDataChanged();					
+				
 					
-					System.out.print( "\n" + "Name: " + rowData[0]  + " Symbol: "+ rowData[1]  + " Position: "+ rowData[2]  + " Price: "+ rowData[3]   );
+//					System.out.print( "\n" + "Name: " + rowData[0]); 
 
 				}
 
@@ -336,6 +373,55 @@ public class StrategyAdd extends JFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	}	
+	
+	public void showAllStrategyTableDataChange(Object rowData[]) {
+		model.addRow(rowData);
+		model.fireTableDataChanged();
+	}
+	
+	public void showSelectedStrategyTable(String strStgName) {
+		
+		String strSQL =  "Select * from STRATEGY where name ='" + strStgName + "'";
+		String strStrategyName = "";
+		
+		try {
+			
+			ResultSet rs = DBConnect.getTable(strSQL);
+			
+			if(rs != null) {
+				
+				int nColumnCnt = 3; //
+				
+				Object rowData[] = new Object[nColumnCnt] ;
+				
+				StgTableModel.clearAllRows();
+				while(rs.next()) {
+					strStrategyName = rs.getString(2);
+	//			Ref:OptionLeg(String strSymbol, int iPosition, int nPrice)
+					OptionLeg objOptionLeg = new OptionLeg(rs.getString(3), rs.getInt(4), rs.getInt(5));
+					
+					rowData[0] = rs.getString(3);
+					rowData[1] = rs.getString(4);
+					rowData[2] = rs.getInt(5);
+
+
+					StgTableModel.addRowData(strStrategyName, objOptionLeg);
+					StgTableModel.fireTableDataChanged();					
+					
+					System.out.print( "\n" + "Name: " + rowData[0]  + " Symbol: "+ rowData[1]  + " Position: "+ rowData[2] );// + " Price: "+ rowData[3]   );
+
+				}
+
+			}
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		// Now that we show the chart
+		showChart(strStrategyName);
 	}
 	
 	public void createTableNew() {
@@ -392,5 +478,38 @@ public class StrategyAdd extends JFrame {
 
 	    return new DefaultTableModel(data, columnNames);
 
-	}	
+	}
+	
+	public void showChart (String strStgName) {
+
+		OptionStrategy objOptionStrategy = new OptionStrategy();
+		String strSQL =  "Select * from STRATEGY where name ='" + strStgName + "'";
+//		String strSQL =  "Select * from STRATEGY";
+		
+		try {
+			
+			ResultSet rs = DBConnect.getTable(strSQL);
+			
+			
+			
+			while(rs.next()) {
+//				JOptionPane.showInternalMessageDialog(null, "Result: " + rs.getString(2));
+				objOptionStrategy.setStrName(rs.getString(2));
+//			Ref:OptionLeg(int iPosition, int iType, int nStrike, int nPrice)
+				objOptionStrategy.setOptLeg(new OptionLeg(rs.getString(3), rs.getInt(4), rs.getInt(5)));  
+				
+			
+				
+			}
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		pnlChart.removeAll();
+		pnlChart.add(Util.getLineChart(objOptionStrategy.getPayOffData()));
+		pnlChart.revalidate();
+		pnlChart.repaint();				
+	}
 }

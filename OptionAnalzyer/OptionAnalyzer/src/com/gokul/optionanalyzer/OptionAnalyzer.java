@@ -207,9 +207,9 @@ public class OptionAnalyzer {
 	public void addOptionLeg() {
 		OptionLeg optionLeg = new OptionLeg();
 		optionLeg.setiPosition((int)spnPosition.getValue());
-		optionLeg.setiType(cmbType.getSelectedIndex());
-
-		optionLeg.setnStrike(Integer.parseInt(txtStrike.getText()));
+//		optionLeg.setiType(cmbType.getSelectedIndex());
+//
+//		optionLeg.setnStrike(Integer.parseInt(txtStrike.getText()));
 		optionLeg.setnPrice(Integer.parseInt(txtPrice.getText()));
 
 		

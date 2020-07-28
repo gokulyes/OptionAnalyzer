@@ -6,10 +6,9 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 public class OptionLeg {
-
+	
+	private String strSymbol;
 	private int iPosition;
-	private int iType;
-	private int nStrike;
 	private int nPrice;
 	
 	
@@ -17,14 +16,21 @@ public class OptionLeg {
 		
 	}
 
-	public OptionLeg(int iPosition, int iType, int nStrike, int nPrice) {
-		super();
+	
+	public OptionLeg(String strSym, int iPosition, int nPrice) {
+		this.strSymbol = strSym;
 		this.iPosition = iPosition;
-		this.iType = iType;
-		this.nStrike = nStrike;
 		this.nPrice = nPrice;
 
 	}	
+	
+	public String getSymbol() {
+		return strSymbol;
+	}
+	
+	public void setSymbol(String strSym) {
+		this.strSymbol = strSym;
+	}
 
 	public int getiPosition() {
 		return iPosition;
@@ -34,20 +40,14 @@ public class OptionLeg {
 		this.iPosition = iPosition;
 	}
 
-	public int getiType() {
-		return iType;
-	}
-
-	public void setiType(int iType) {
-		this.iType = iType;
-	}
-
-	public int getnStrike() {
-		return nStrike;
-	}
-
-	public void setnStrike(int nStrike) {
-		this.nStrike = nStrike;
+	public String getType() {
+		if(this.strSymbol.substring(this.strSymbol.length() -2) == "CE") {
+			return "CE"; // 0:Call ; 1: Put
+		} else if(this.strSymbol.substring(this.strSymbol.length() -2) == "PE") {	
+			return "PE";
+		} else {
+			return "";
+		}
 	}
 
 	public int getnPrice() {
@@ -61,10 +61,13 @@ public class OptionLeg {
 	
 	public List<Integer> getPayOffData() {
 		List<Integer> listOLPayOff = new ArrayList<>();
+//		String strType = this.strSymbol.substring(this.strSymbol.length() -2);
+		int nStrike = strSymbol.length() > 12 ? Integer.parseInt(strSymbol.substring(0, strSymbol.length()-2).substring(12)) : 0;		
+		
 		for(int nUnderlying =8000; nUnderlying <= 12000; nUnderlying+=100) {
-			if(iType == 0) { // 0: Call, 1: Put
+			if(this.strSymbol.substring(this.strSymbol.length() -2).equals("CE")) { // 0: Call, 1: Put
 				if (iPosition == 0) { // Long ------ 		0: Long, 1: Short 
-					if (nUnderlying > this.nStrike) { // In the Money
+					if (nUnderlying > nStrike) { // In the Money
 						listOLPayOff.add(nUnderlying - nStrike - nPrice);
 					} else { // Out of the Money
 						listOLPayOff.add(- nPrice);
@@ -72,7 +75,7 @@ public class OptionLeg {
 
 					
 				} else if (iPosition == 1) { //Short
-					if (nUnderlying > this.nStrike) { // In the Money
+					if (nUnderlying > nStrike) { // In the Money
 						listOLPayOff.add(-(nUnderlying - nStrike - nPrice));
 					} else { // Out of the Money
 						listOLPayOff.add(nPrice);
@@ -82,7 +85,7 @@ public class OptionLeg {
 
 			} else { // Put
 				if (iPosition == 0) { // Long
-					if (nUnderlying < this.nStrike) { // In the Money
+					if (nUnderlying < nStrike) { // In the Money
 						listOLPayOff.add( nStrike - nUnderlying - nPrice);
 					} else { // Out of the Money
 						listOLPayOff.add(- nPrice);
@@ -90,7 +93,7 @@ public class OptionLeg {
 
 					
 				} else if (iPosition == 1) { //Short
-					if (nUnderlying < this.nStrike) { // In the Money
+					if (nUnderlying < nStrike) { // In the Money
 						listOLPayOff.add(-(nStrike - nUnderlying - nPrice));
 					} else { // Out of the Money
 						listOLPayOff.add(nPrice);
@@ -106,11 +109,5 @@ public class OptionLeg {
 	
 
 
-	@Override
-	public String toString() {
-		return "\n OptionLeg [iPosition=" + iPosition + ", iType=" + iType + ", nStrike=" + nStrike + ", nPrice=" + nPrice
-				+ "]";
-	}
-	
 
 }
