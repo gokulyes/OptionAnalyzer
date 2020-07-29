@@ -25,6 +25,7 @@ import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.gokul.optionanalyzer.OptionAnalyzer;
 import com.gokul.optionanalyzer.Strategy;
 import com.gokul.optionanalyzer.util.DBConnect;
 import com.gokul.optionanalyzer.util.Util;
@@ -33,9 +34,9 @@ import com.toedter.calendar.JDateChooser;
 
 public class StrgShowAllDialog extends JDialog{
 	
-	JPanel pnlAllStrgTable;
-	JLabel lblStrgName;
-	
+	private JPanel pnlAllStrgTable;
+	private JLabel lblStrgName;
+	private OptionAnalyzer objOptionAnalyzer;
 	private Connection connection ;
 	
 	private DefaultTableModel model;
@@ -46,6 +47,7 @@ public class StrgShowAllDialog extends JDialog{
 
 	public StrgShowAllDialog(Frame frmFrame) {
 		super(frmFrame, true);
+
 	
 		showGUI();
 	
@@ -54,9 +56,24 @@ public class StrgShowAllDialog extends JDialog{
 
 		
 	}
+	
+	public StrgShowAllDialog(Frame frmFrame, OptionAnalyzer objParent) {
+		super(frmFrame, true);
+
+		objOptionAnalyzer = objParent;
+	
+		showGUI();
+	
+		setLocationRelativeTo(null);
+		setVisible(true);
+
+		
+	}
+	
+	
 
 	private void showGUI() {
-		setTitle("Strategy Add");
+		setTitle("Strategy Select");
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(0, 0, 391, 441);
 		getContentPane().setLayout(null);
@@ -120,8 +137,10 @@ public class StrgShowAllDialog extends JDialog{
 //				showSelectedStrategyTable( model.getValueAt(iSelectedRow, 0).toString());
 				
 				lblStrgName.setText(model.getValueAt(iSelectedRow, 0).toString());
+				
+				objOptionAnalyzer.setStrgSelected(model.getValueAt(iSelectedRow, 0).toString());
 
-				System.out.print("\nmouseClicked : " + model.getValueAt(iSelectedRow, 0));
+//				System.out.print("\nmouseClicked : " + model.getValueAt(iSelectedRow, 0));
 			}
 		});
 		
