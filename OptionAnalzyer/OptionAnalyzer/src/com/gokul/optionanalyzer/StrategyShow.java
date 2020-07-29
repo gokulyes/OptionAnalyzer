@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import javax.swing.JTable;
 
 public class StrategyShow extends JFrame {
 

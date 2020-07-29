@@ -128,9 +128,11 @@ public class Strategy extends JFrame {
 		tblAllStrategy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
 				int iSelectedRow = tblAllStrategy.getSelectedRow();
 				showSelectedStrategyTable( model.getValueAt(iSelectedRow, 0).toString());
-				System.out.print("\nmouseClicked : " + model.getValueAt(iSelectedRow, 0));
+
+//				System.out.print("\nmouseClicked : " + model.getValueAt(iSelectedRow, 0));
 			}
 		});
 		
@@ -163,48 +165,48 @@ public class Strategy extends JFrame {
 		panel_1.setLayout(null);
 		
 		JLabel lblName = new JLabel("Strategy Name");
-		lblName.setBounds(10, 0, 104, 26);
+		lblName.setBounds(10, 11, 104, 26);
 		panel_1.add(lblName);
 		lblName.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		txtName = new JTextField();
-		txtName.setBounds(10, 30, 146, 20);
+		txtName.setBounds(10, 41, 146, 20);
 		panel_1.add(txtName);
 		txtName.setColumns(10);
 		
 		JLabel lblExpiry = new JLabel("Expiry");
-		lblExpiry.setBounds(165, 1, 127, 25);
+		lblExpiry.setBounds(165, 12, 127, 25);
 		panel_1.add(lblExpiry);
 		lblExpiry.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		dteExpiry = new JDateChooser();
-		dteExpiry.setBounds(165, 30, 147, 20);
+		dteExpiry.setBounds(165, 41, 147, 20);
 		panel_1.add(dteExpiry);
 		
 		JLabel lblType = new JLabel("Type");
-		lblType.setBounds(321, 1, 127, 25);
+		lblType.setBounds(321, 12, 127, 25);
 		panel_1.add(lblType);
 		lblType.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		cmbType = new JComboBox();
-		cmbType.setBounds(322, 29, 146, 22);
+		cmbType.setBounds(322, 40, 146, 22);
 		panel_1.add(cmbType);
 		cmbType.setModel(new DefaultComboBoxModel(new String[] {"Call", "Put"}));
 		cmbType.setSelectedIndex(0);
 		
 		JLabel lblStrike = new JLabel("Strike");
-		lblStrike.setBounds(478, 1, 127, 25);
+		lblStrike.setBounds(478, 12, 127, 25);
 		panel_1.add(lblStrike);
 		lblStrike.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		txtStrike = new JTextField();
-		txtStrike.setBounds(478, 30, 146, 20);
+		txtStrike.setBounds(478, 41, 146, 20);
 		panel_1.add(txtStrike);
 		txtStrike.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtStrike.setColumns(10);
 		
 		JComboBox cmbPosition = new JComboBox();
-		cmbPosition.setBounds(634, 29, 146, 22);
+		cmbPosition.setBounds(634, 40, 146, 22);
 		panel_1.add(cmbPosition);
 		cmbPosition.addFocusListener(new FocusAdapter() {
 			@Override
@@ -215,12 +217,12 @@ public class Strategy extends JFrame {
 		cmbPosition.setSelectedIndex(0);
 		
 		JLabel lblPosition = new JLabel("Position");
-		lblPosition.setBounds(634, 1, 127, 25);
+		lblPosition.setBounds(634, 12, 127, 25);
 		panel_1.add(lblPosition);
 		lblPosition.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		txtPrice = new JTextField();
-		txtPrice.setBounds(790, 30, 146, 20);
+		txtPrice.setBounds(790, 41, 146, 20);
 		panel_1.add(txtPrice);
 		txtPrice.addFocusListener(new FocusAdapter() {
 			@Override
@@ -242,44 +244,55 @@ public class Strategy extends JFrame {
 		txtPrice.setColumns(10);
 		
 		JLabel lblPrice = new JLabel("Price");
-		lblPrice.setBounds(790, 1, 127, 25);
+		lblPrice.setBounds(790, 12, 127, 25);
 		panel_1.add(lblPrice);
 		lblPrice.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		txtSymbol = new JTextField();
-		txtSymbol.setBounds(946, 30, 146, 20);
+		txtSymbol.setBounds(946, 41, 146, 20);
 		panel_1.add(txtSymbol);
 		txtSymbol.setEditable(false);
 		txtSymbol.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtSymbol.setColumns(10);
 		
 		JLabel lblSymbol = new JLabel("Symbol");
-		lblSymbol.setBounds(946, 1, 127, 25);
+		lblSymbol.setBounds(946, 12, 127, 25);
 		panel_1.add(lblSymbol);
 		lblSymbol.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		
 		JButton btnAdd = new JButton("Add");
-		btnAdd.setBounds(1125, 29, 89, 23);
+		btnAdd.setBounds(1125, 40, 89, 23);
 		panel_1.add(btnAdd);
 		
-				btnAdd.setIcon(new ImageIcon(Strategy.class.getResource("/ic_check_box.png")));
+				btnAdd.setIcon(new ImageIcon(Strategy.class.getResource("/imgStrgSelect.png")));
 				
 	
 				JButton btnClose = new JButton("Close");
-				btnClose.setBounds(1224, 29, 89, 23);
+				btnClose.setBounds(1224, 40, 89, 23);
 				panel_1.add(btnClose);
 				btnClose.setIcon(new ImageIcon(Strategy.class.getResource("/imgStop.png")));
+				
+				JLabel lblNewJgoodiesTitle = DefaultComponentFactory.getInstance().createTitle("Option Strategy");
+				lblNewJgoodiesTitle.setBounds(10, 0, 88, 14);
+				panel_1.add(lblNewJgoodiesTitle);
+				
+				JButton btnStrategySetting = new JButton("Setting");
+				btnStrategySetting.setIcon(new ImageIcon(Strategy.class.getResource("/imgSetting.png")));
+				btnStrategySetting.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						JOptionPane.showMessageDialog(null, "Setting Dialog");
+					}
+				});
+				btnStrategySetting.setBounds(1125, 6, 89, 23);
+				panel_1.add(btnStrategySetting);
 				btnClose.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						dispose();
 					}
 				});
-				
-				JLabel lblNewJgoodiesTitle = DefaultComponentFactory.getInstance().createTitle("Option Strategy");
-				lblNewJgoodiesTitle.setBounds(10, 0, 88, 14);
-				getContentPane().add(lblNewJgoodiesTitle);
 				
 				pnlChart = new JPanel();
 				pnlChart.setBounds(388, 93, 949, 622);
