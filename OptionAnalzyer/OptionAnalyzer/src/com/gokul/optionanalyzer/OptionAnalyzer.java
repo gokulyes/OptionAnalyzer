@@ -19,7 +19,9 @@ import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 
 import com.gokul.optionanalyzer.dialog.StrgAddDialog;
+import com.gokul.optionanalyzer.dialog.StrgCoverDialog;
 import com.gokul.optionanalyzer.dialog.StrgShowAllDialog;
+import com.gokul.optionanalyzer.model.OptionLeg;
 import com.gokul.optionanalyzer.panel.StrgShowPanel;
 import com.gokul.optionanalyzer.util.Util;
 
@@ -32,6 +34,7 @@ public class OptionAnalyzer {
 	
 	private JPanel pnlMain;
 	private String strStrgSelected ="";
+	private OptionLeg selectedOptionLeg;
 	
 
 
@@ -115,7 +118,8 @@ public class OptionAnalyzer {
 		toolBar.add(btnAddStratergy);
 		
 		ImageIcon iconSelect = Util.createImageIcon("/imgStrgSelect.png");
-		JButton btnStrgSettingSelect = new JButton(" Select  ");
+		JButton btnStrgSettingSelect = new JButton(" Select  ", iconSelect);
+		btnStrgSettingSelect.setMnemonic(KeyEvent.VK_E);
 		btnStrgSettingSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -124,10 +128,6 @@ public class OptionAnalyzer {
 			
 		});
 		toolBar.add(btnStrgSettingSelect);
-		
-		
-		btnStrgSettingSelect.setIcon(iconSelect);
-		btnStrgSettingSelect.setMnemonic(KeyEvent.VK_E);
 		
 		
 		ImageIcon iconShow = Util.createImageIcon("/imgShow.png");
@@ -143,6 +143,16 @@ public class OptionAnalyzer {
 
 		
 		toolBar.add(btnShowStratergy);
+		
+		JButton btnCoverPosition = new JButton(" Cover ", Util.createImageIcon("/imgCoverPostion.png"));
+		btnCoverPosition.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new StrgCoverDialog(frmOptionanalyzer, new OptionLeg(100, "First", "NIFTY2030JUL10000CE", false, 200));
+			}
+		});
+		btnCoverPosition.setMnemonic(KeyEvent.VK_C);
+		
+		toolBar.add(btnCoverPosition);
 		
 		JLabel lblNewLabel = new JLabel(" Current Strategy : ");
 		toolBar.add(lblNewLabel);
@@ -163,6 +173,10 @@ public class OptionAnalyzer {
 		new StrgShowPanel(frmOptionanalyzer, strStrgSelected);
 
 //		System.out.print("\nsetStrgSelected : " + strStrgSelected);
+	}
+	
+	public void setSelectedRow(OptionLeg obj) {
+		this.selectedOptionLeg = obj;
 	}
 	
 	public void setContentPanel(JPanel pnlMain) {

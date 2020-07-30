@@ -35,7 +35,7 @@ public class StrategyTable extends AbstractTableModel {
 	      	case 1:
 	      		return objOptionLeg.getSymbol();
 	        case 2: 
-	        	if (objOptionLeg.getiPosition() == 0)
+	        	if (objOptionLeg.getPosition())
 	        		return "Long";
 	        	else
 	        		return "Short";
@@ -62,7 +62,7 @@ public class StrategyTable extends AbstractTableModel {
 	    		
 	    		strStrategyName = strName;
 	    		data.add(objOptionLeg);
-	    		System.out.print( "\n StrategyTable data.size: " + data.size() );
+//	    		System.out.print( "\n StrategyTable data.size: " + data.size() );
 	    }
 
 		@Override

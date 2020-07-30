@@ -29,18 +29,6 @@ public class Util {
         }
     }
     
-    /** Returns an ImageIcon, or null if the path was invalid. */
-    public static ImageIcon createImageIcon(Class parent, String path) {
-        
-    	java.net.URL imgURL = parent.getResource(path);
-    	
-        if (imgURL != null) {
-            return new ImageIcon(imgURL);
-        } else {
-            System.err.println("Couldn't find file: " + path);
-            return null;
-        }
-    }    
     
 	public static ChartPanel getLineChart(List<Integer> list) {
 		JFreeChart lineChart = ChartFactory.createXYLineChart(

@@ -2,6 +2,8 @@ package com.gokul.optionanalyzer.panel;
 
 import java.awt.BorderLayout;
 import java.awt.SystemColor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -38,11 +40,12 @@ public class StrgShowPanel extends JPanel {
 	private JTable tblStrategy;
 	
 	private StrategyTableModel StgTableModel;
-	private DefaultTableModel model;
-	private JTable table;
+	private OptionLeg objOptionLeg =  new OptionLeg();
 	
-	private JDateChooser dteExpiry;
-	private JTable table_1;
+	
+	
+//	private JDateChooser dteExpiry;
+
 	private JPanel pnlChart;	
 	private JFrame frame;
 	private JPanel pnlStrgShow;
@@ -54,17 +57,6 @@ public class StrgShowPanel extends JPanel {
         
         createGUI();
     }
-    
-//    public StrgShowPanel(JFrame frame, String strStrgName, OptionAnalyzer objParent) {
-//        super(new BorderLayout());
-//        this.frame = frame;
-//        this.strStrgName =  strStrgName;
-//        
-////        objOptionAnalyzer = objParent;
-//        
-//        createGUI();
-//    }
-    	
     
 	private void createGUI() {
 		// TODO Auto-generated method stub
@@ -107,8 +99,24 @@ public class StrgShowPanel extends JPanel {
 		
 		tblStrategy.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		dteExpiry = new JDateChooser();
-		dteExpiry.setBounds(165, 41, 147, 20);
+		tblStrategy.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				int iSelectedRow = tblStrategy.getSelectedRow();
+//				showSelectedStrategyTable( model.getValueAt(iSelectedRow, 0).toString());
+				
+//				lblStrgName.setText(model.getValueAt(iSelectedRow, 0).toString());
+//				
+//				objOptionAnalyzer.setStrgSelected(model.getValueAt(iSelectedRow, 0).toString());
+				objOptionLeg = StgTableModel.getRowData(iSelectedRow);
+				
+				System.out.print("\nmouseClicked : " + StgTableModel.getRowData(iSelectedRow).toString());// StgTableModel.getValueAt(iSelectedRow, 0));
+			}
+		});		
+		
+//		dteExpiry = new JDateChooser();
+//		dteExpiry.setBounds(165, 41, 147, 20);
 				
 
 		createTableNew();
@@ -133,25 +141,20 @@ public class StrgShowPanel extends JPanel {
 			
 			if(rs != null) {
 				
-				int nColumnCnt = 3; //
-				
-				Object rowData[] = new Object[nColumnCnt] ;
+//				int nColumnCnt = 10; //
+//				
+//				Object rowData[] = new Object[nColumnCnt] ;
 				
 				StgTableModel.clearAllRows();
 				while(rs.next()) {
-					strStrategyName = rs.getString(2);
-	//			Ref:OptionLeg(String strSymbol, int iPosition, int nPrice)
-					OptionLeg objOptionLeg = new OptionLeg(rs.getString(3), rs.getInt(4), rs.getInt(5));
-					
-					rowData[0] = rs.getString(3);
-					rowData[1] = rs.getString(4);
-					rowData[2] = rs.getInt(5);
 
+					strStrategyName = rs.getString(2);
+					OptionLeg objOptionLeg = new OptionLeg(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getInt(5), rs.getBoolean(6), rs.getInt(7));
 
 					StgTableModel.addRowData(strStrategyName, objOptionLeg);
 					StgTableModel.fireTableDataChanged();					
 					
-					System.out.print( "\n" + "Name: " + rowData[0]  + " Symbol: "+ rowData[1]  + " Position: "+ rowData[2] );// + " Price: "+ rowData[3]   );
+//					System.out.print( "\n" + "ID: " + rowData[0]  + " Name: "+ rowData[1]  + " objOptionLeg. ID: "+ objOptionLeg.getID() + " Name: "+objOptionLeg.getStrategyName() );// + " Price: "+ rowData[3]   );
 
 				}
 
@@ -213,7 +216,7 @@ public class StrgShowPanel extends JPanel {
 //				JOptionPane.showInternalMessageDialog(null, "Result: " + rs.getString(2));
 				objOptionStrategy.setStrName(rs.getString(2));
 //			Ref:OptionLeg(int iPosition, int iType, int nStrike, int nPrice)
-				objOptionStrategy.setOptLeg(new OptionLeg(rs.getString(3), rs.getInt(4), rs.getInt(5)));  
+				objOptionStrategy.setOptLeg(new OptionLeg(rs.getInt(1), rs.getNString(2), rs.getString(3), rs.getBoolean(4), rs.getInt(5)));  
 				
 			
 				

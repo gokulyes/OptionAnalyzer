@@ -13,7 +13,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -26,7 +25,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.gokul.optionanalyzer.OptionAnalyzer;
-import com.gokul.optionanalyzer.Strategy;
 import com.gokul.optionanalyzer.util.DBConnect;
 import com.gokul.optionanalyzer.util.Util;
 import com.toedter.calendar.JDateChooser;
@@ -116,7 +114,7 @@ public class StrgShowAllDialog extends JDialog{
 		JButton btnClose = new JButton("Close");
 		btnClose.setBounds(114, 313, 89, 23);
 		pnlAllStrgTable.add(btnClose);
-		btnClose.setIcon(Util.createImageIcon(Strategy.class,"/imgStop.png"));
+		btnClose.setIcon(Util.createImageIcon("/imgStop.png"));
 
 		btnClose.addActionListener(new ActionListener() {
 			@Override
@@ -212,8 +210,8 @@ public class StrgShowAllDialog extends JDialog{
 			if( resultSet.next()) { // if table exists do nothing
 			
 			} else  { 				// else create new table
-//				String create_Table = "CREATE TABLE STRATEGY (id int auto_increment, name varchar2(20), position int, type int, strike int, price int)";
-				String create_Table = "CREATE TABLE STRATEGY (id int auto_increment, name varchar2(20), symbol varchar2(20), position int, price int)";
+//				String create_Table = "CREATE TABLE STRATEGY (id int auto_increment, name varchar2(20), position boolean, type int, strike int, price int)";
+				String create_Table = "CREATE TABLE STRATEGY (id int auto_increment, name varchar2(20), symbol varchar2(20), position boolean, price int, covered boolean, coverprice int)";
 				PreparedStatement statement = connection.prepareStatement(create_Table);
 				statement.executeUpdate();
 				System.out.print("\nStrategy Table created\n");
